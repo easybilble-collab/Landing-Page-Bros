@@ -88,13 +88,10 @@ export const Hero = () => {
       <div className="bg-secondary py-8">
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-center gap-4 px-4 md:px-6">
           <Button size="lg" className="w-full md:w-auto">
-            Locar Equipamentos
+            Ver Equipamentos
           </Button>
           <Button size="lg" variant="outline" className="w-full md:w-auto">
             Solicitar Contato
-          </Button>
-          <Button size="lg" variant="ghost" className="w-full md:w-auto">
-            Compre agora
           </Button>
         </div>
       </div>

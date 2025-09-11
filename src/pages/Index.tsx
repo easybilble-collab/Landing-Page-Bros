@@ -2,6 +2,8 @@ import { Header } from "@/components/landing/Header";
 import { Hero } from "@/components/landing/Hero";
 import { Problems } from "@/components/landing/Problems";
 import { Solutions } from "@/components/landing/Solutions";
+import { HowItWorks } from "@/components/landing/HowItWorks";
+import { Clients } from "@/components/landing/Clients";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const Index = () => {
@@ -12,6 +14,8 @@ const Index = () => {
         <Hero />
         <Problems />
         <Solutions />
+        <HowItWorks />
+        <Clients />
         {/* As próximas seções serão adicionadas aqui */}
       </main>
       <footer className="py-6 bg-secondary">
