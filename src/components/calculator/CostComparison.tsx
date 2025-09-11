@@ -1,0 +1,1 @@
+// Componente interativo para comparação de custos
