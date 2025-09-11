@@ -4,58 +4,68 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Calculator, DollarSign, RefreshCw, TrendingUp, AlertCircle } from 'lucide-react';
+import { Calculator, DollarSign, RefreshCw, TrendingUp, AlertCircle, Gem } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-// Dados de mercado reais (valores médios para notebooks corporativos)
+// Dados de mercado + tributação BR (2024)
 const MARKET_DATA = {
   notebook: {
-    purchasePrice: 4500, // Média para notebooks i5/16GB (Dell Latitude, Lenovo ThinkPad)
-    rentalMonthly: 150,  // Média de locação com manutenção
-    maintenanceRate: 8,  // % do valor anual para manutenção (compra)
-    refreshCycle: 3,     // Ciclo médio de atualização (anos)
-    lifespan: 5          // Vida útil média (anos)
+    purchasePrice: 4500,
+    rentalMonthly: 150,
+    maintenanceRate: 8,
+    refreshCycle: 3,
+    lifespan: 5,
+    taxRates: {
+      irpj: 0.15,       // IRPJ (15% + 10% adicional sobre lucro > R$60k/mês)
+      csll: 0.09,       // CSLL
+      pisCofins: 0.0925 // PIS/COFINS (regime cumulativo)
+    }
   }
 };
 
 export const CostComparison = () => {
-  const [equipmentType] = useState<'notebook'>('notebook');
   const [equipmentCost, setEquipmentCost] = useState<number>(MARKET_DATA.notebook.purchasePrice);
   const [rentalMonthly, setRentalMonthly] = useState<number>(MARKET_DATA.notebook.rentalMonthly);
   const [duration, setDuration] = useState<number>(36);
-  const [maintenanceRate, setMaintenanceRate] = useState<number>(MARKET_DATA.notebook.maintenanceRate);
-  const [techRefresh, setTechRefresh] = useState<number>(MARKET_DATA.notebook.refreshCycle);
+  const [monthlyProfit, setMonthlyProfit] = useState<number>(100000); // Lucro médio mensal da empresa
+  const [includeTax, setIncludeTax] = useState<boolean>(true);
 
-  // Cálculos realistas
-  const purchaseCosts = {
-    initial: equipmentCost,
-    maintenance: equipmentCost * (maintenanceRate/100) * (duration/12),
-    replacement: techRefresh > 0 ? (equipmentCost * Math.floor(duration/(techRefresh*12))) : 0,
-    residualValue: equipmentCost * 0.2 * (1 - (duration/12)/MARKET_DATA.notebook.lifespan) // Valor residual decrescente
+  // Cálculos tributários
+  const taxSavings = (value: number) => {
+    if (!includeTax) return 0;
+    const { irpj, csll, pisCofins } = MARKET_DATA.notebook.taxRates;
+    return value * (irpj + csll + pisCofins); // Economia tributária total
   };
 
-  const purchaseTotal = purchaseCosts.initial + purchaseCosts.maintenance + purchaseCosts.replacement - purchaseCosts.residualValue;
-  const rentalTotal = rentalMonthly * duration;
-  const savings = purchaseTotal - rentalTotal;
-  const savingsPercentage = (savings / purchaseTotal) * 100;
+  // Cálculos para COMPRA
+  const depreciationPerMonth = equipmentCost / (MARKET_DATA.notebook.lifespan * 12);
+  const purchaseTaxBenefits = taxSavings(depreciationPerMonth * Math.min(duration, MARKET_DATA.notebook.lifespan * 12));
+
+  // Cálculos para LOCAÇÃO
+  const rentalTaxBenefits = taxSavings(rentalMonthly * duration);
+
+  // Custo Líquido
+  const purchaseNetCost = equipmentCost - purchaseTaxBenefits;
+  const rentalNetCost = (rentalMonthly * duration) - rentalTaxBenefits;
+  const savings = purchaseNetCost - rentalNetCost;
 
   return (
     <section className="py-12 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold">Calculadora Realista de Economia</h2>
+          <h2 className="text-3xl font-bold">Calculadora para Lucro Real</h2>
           <p className="text-muted-foreground mt-2">
-            Baseado em dados de mercado para equipamentos corporativos
+            Comparação com benefícios fiscais (IRPJ, CSLL, PIS/COFINS)
           </p>
         </div>
 
         <Alert className="mb-6 bg-blue-50 border-blue-200">
-          <AlertCircle className="h-4 w-4 text-blue-600" />
-          <AlertTitle>Dados de Referência</AlertTitle>
+          <Gem className="h-4 w-4 text-blue-600" />
+          <AlertTitle>Vantagem Tributária</AlertTitle>
           <AlertDescription>
-            Valores padrão calculados para notebooks corporativos (i5/16GB) com vida útil de 5 anos.
+            No Lucro Real, a locação é 100% dedutível como despesa operacional, reduzindo a base de cálculo dos impostos.
           </AlertDescription>
         </Alert>
 
@@ -64,35 +74,46 @@ export const CostComparison = () => {
             <CardHeader className="p-0 mb-6">
               <CardTitle className="flex items-center gap-2">
                 <Calculator className="h-6 w-6 text-primary" />
-                Parâmetros Reais
+                Parâmetros Financeiros
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0 space-y-6">
+              <div className="flex items-center gap-3">
+                <Label className="flex-1">Incluir benefícios fiscais?</Label>
+                <Button
+                  variant={includeTax ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setIncludeTax(true)}
+                >
+                  Sim
+                </Button>
+                <Button
+                  variant={!includeTax ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setIncludeTax(false)}
+                >
+                  Não
+                </Button>
+              </div>
+
               <div>
-                <Label htmlFor="equipmentCost">Valor de compra do equipamento</Label>
+                <Label>Valor do equipamento (compra)</Label>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-muted-foreground">R$</span>
                   <Input
-                    id="equipmentCost"
-                    type="number"
                     value={equipmentCost}
                     onChange={(e) => setEquipmentCost(Number(e.target.value))}
                     min={1000}
                     max={10000}
                   />
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Faixa realista: R$ 3.000 - R$ 6.000 para notebooks corporativos
-                </p>
               </div>
 
               <div>
-                <Label htmlFor="rentalMonthly">Mensalidade de locação</Label>
+                <Label>Mensalidade de locação</Label>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-muted-foreground">R$</span>
                   <Input
-                    id="rentalMonthly"
-                    type="number"
                     value={rentalMonthly}
                     onChange={(e) => setRentalMonthly(Number(e.target.value))}
                     min={50}
@@ -100,12 +121,12 @@ export const CostComparison = () => {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Média de mercado: 3-5% do valor do equipamento/mês
+                  Média: 3-5% do valor do equipamento/mês
                 </p>
               </div>
 
               <div>
-                <Label>Prazo de comparação</Label>
+                <Label>Prazo (meses)</Label>
                 <Slider
                   value={[duration]}
                   min={6}
@@ -119,35 +140,20 @@ export const CostComparison = () => {
                 </div>
               </div>
 
-              <div>
-                <Label>Manutenção anual (compra)</Label>
-                <Slider
-                  value={[maintenanceRate]}
-                  min={0}
-                  max={15}
-                  step={0.5}
-                  onValueChange={(value) => setMaintenanceRate(value[0])}
-                  className="mt-2"
-                />
-                <div className="text-sm text-muted-foreground mt-1">
-                  {maintenanceRate}% ao ano (Média: 5-10% para notebooks)
+              {includeTax && (
+                <div>
+                  <Label>Lucro mensal da empresa (R$)</Label>
+                  <Input
+                    value={monthlyProfit}
+                    onChange={(e) => setMonthlyProfit(Number(e.target.value))}
+                    min={20000}
+                    max={500000}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Para cálculo do IRPJ adicional (10% sobre lucro acima de R$60k/mês)
+                  </p>
                 </div>
-              </div>
-
-              <div>
-                <Label>Ciclo de atualização</Label>
-                <Slider
-                  value={[techRefresh]}
-                  min={0}
-                  max={5}
-                  step={1}
-                  onValueChange={(value) => setTechRefresh(value[0])}
-                  className="mt-2"
-                />
-                <div className="text-sm text-muted-foreground mt-1">
-                  {techRefresh > 0 ? `A cada ${techRefresh} anos` : 'Sem atualização'} (Recomendado: 3 anos)
-                </div>
-              </div>
+              )}
             </CardContent>
           </Card>
 
@@ -155,67 +161,74 @@ export const CostComparison = () => {
             <CardHeader className="p-0 mb-6">
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="h-6 w-6" />
-                Resultado Detalhado
+                Resultado Tributário
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0 space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-background/10 p-4 rounded-lg">
-                  <h3 className="text-sm font-medium">Custo Total (Compra)</h3>
+                  <h3 className="text-sm font-medium">Compra (Líquido)</h3>
                   <p className="text-2xl font-bold mt-1">
-                    R$ {purchaseTotal.toLocaleString('pt-BR', { maximumFractionDigits: 2 })}
+                    R$ {purchaseNetCost.toLocaleString('pt-BR', {maximumFractionDigits: 2})}
                   </p>
-                  <div className="text-xs mt-2 space-y-1">
-                    <p>• Aquisição: R$ {purchaseCosts.initial.toLocaleString('pt-BR')}</p>
-                    <p>• Manutenção: R$ {purchaseCosts.maintenance.toLocaleString('pt-BR')}</p>
-                    <p>• Atualização: R$ {purchaseCosts.replacement.toLocaleString('pt-BR')}</p>
-                    <p>• Valor residual: -R$ {purchaseCosts.residualValue.toLocaleString('pt-BR')}</p>
-                  </div>
+                  {includeTax && (
+                    <p className="text-xs mt-1">
+                      Economia fiscal: R$ {purchaseTaxBenefits.toLocaleString('pt-BR')}
+                    </p>
+                  )}
                 </div>
                 <div className="bg-background/10 p-4 rounded-lg">
-                  <h3 className="text-sm font-medium">Custo Total (Locação)</h3>
+                  <h3 className="text-sm font-medium">Locação (Líquido)</h3>
                   <p className="text-2xl font-bold mt-1">
-                    R$ {rentalTotal.toLocaleString('pt-BR', { maximumFractionDigits: 2 })}
+                    R$ {rentalNetCost.toLocaleString('pt-BR', {maximumFractionDigits: 2})}
                   </p>
-                  <p className="text-xs mt-2">
-                    Inclui manutenção, trocas e upgrades
-                  </p>
+                  {includeTax && (
+                    <p className="text-xs mt-1">
+                      Economia fiscal: R$ {rentalTaxBenefits.toLocaleString('pt-BR')}
+                    </p>
+                  )}
                 </div>
               </div>
 
               <div className="bg-background/10 p-4 rounded-lg">
-                <h3 className="text-sm font-medium">Economia com Locação</h3>
+                <h3 className="text-sm font-medium">Vantagem da Locação</h3>
                 <p className={`text-3xl font-bold mt-1 ${savings > 0 ? 'text-green-300' : 'text-red-300'}`}>
-                  {savings > 0 ? 'R$ ' + savings.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) : 'Sem economia'}
+                  {savings > 0 ? 'R$ ' + savings.toLocaleString('pt-BR') : 'Sem vantagem'}
                 </p>
-                {savings > 0 ? (
+                {includeTax && savings > 0 && (
                   <p className="text-sm mt-1">
-                    ({savingsPercentage.toFixed(1)}% de economia) | Equivalente a {Math.abs(savings/duration).toLocaleString('pt-BR', {maximumFractionDigits:2})} por mês
-                  </p>
-                ) : (
-                  <p className="text-sm mt-1 text-red-300">
-                    Compra pode ser mais vantajosa para prazos curtos ({duration < 18 ? "<1.5 anos" : ""})
+                    Incluindo economia fiscal de {(savings/(purchaseNetCost+savings)*100).toFixed(1)}%
                   </p>
                 )}
               </div>
 
-              <div className="bg-background/10 p-4 rounded-lg">
-                <h3 className="text-sm font-medium">Análise Financeira</h3>
-                <ul className="mt-2 space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <DollarSign className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Break-even:</strong> {Math.ceil(equipmentCost/rentalMonthly)} meses para compensar a compra
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <RefreshCw className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Atualização:</strong> Economia de R$ {(equipmentCost * 0.7).toLocaleString('pt-BR')} a cada {techRefresh} anos
-                    </span>
-                  </li>
-                </ul>
-              </div>
+              {includeTax && (
+                <div className="bg-background/10 p-4 rounded-lg">
+                  <h3 className="text-sm font-medium">Detalhes Tributários</h3>
+                  <ul className="mt-2 space-y-2 text-xs">
+                    <li className="flex justify-between">
+                      <span>Redução no IRPJ:</span>
+                      <span>15% {monthlyProfit > 60000 ? '+ 10% adicional' : ''}</span>
+                    </li>
+                    <li className="flex justify-between">
+                      <span>Redução na CSLL:</span>
+                      <span>9%</span>
+                    </li>
+                    <li className="flex justify-between">
+                      <span>Redução no PIS/COFINS:</span>
+                      <span>9.25%</span>
+                    </li>
+                    <li className="flex justify-between pt-2 mt-2 border-t border-white/20">
+                      <span>Total de economia fiscal:</span>
+                      <span className="font-bold">
+                        {(MARKET_DATA.notebook.taxRates.irpj + 
+                          MARKET_DATA.notebook.taxRates.csll + 
+                          MARKET_DATA.notebook.taxRates.pisCofins) * 100}%
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              )}
 
               <Button 
                 variant="secondary" 
@@ -224,15 +237,22 @@ export const CostComparison = () => {
                   setEquipmentCost(MARKET_DATA.notebook.purchasePrice);
                   setRentalMonthly(MARKET_DATA.notebook.rentalMonthly);
                   setDuration(36);
-                  setMaintenanceRate(MARKET_DATA.notebook.maintenanceRate);
-                  setTechRefresh(MARKET_DATA.notebook.refreshCycle);
+                  setMonthlyProfit(100000);
                 }}
               >
-                Usar Valores de Mercado
+                Redefinir Valores
               </Button>
             </CardContent>
           </Card>
         </div>
+
+        <Alert className="mt-8 bg-green-50 border-green-200">
+          <AlertCircle className="h-4 w-4 text-green-600" />
+          <AlertTitle>Exemplo Prático</AlertTitle>
+          <AlertDescription>
+            Para uma empresa com lucro de R$100k/mês, a locação de 10 notebooks economiza até <strong>R$ {(taxSavings(1500)*10).toLocaleString('pt-BR')}/ano</strong> em impostos.
+          </AlertDescription>
+        </Alert>
       </div>
     </section>
   );
