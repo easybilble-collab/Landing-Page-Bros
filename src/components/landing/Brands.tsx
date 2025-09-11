@@ -1,15 +1,15 @@
-const brandLogos = [
-  { name: "Apple", logo: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/apple-logo-white.svg" },
-  { name: "Dell", logo: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/dell-logo-white.svg" },
-  { name: "HP", logo: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/hp-logo-white.svg" },
-  { name: "Samsung", logo: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/samsung-logo-white.svg" },
-  { name: "Lenovo", logo: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/lenovo-logo-white.svg" },
-  { name: "Microsoft", logo: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/microsoft-logo-white.svg" },
-  { name: "Asus", logo: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/asus-logo-white.svg" },
+const brandNames = [
+  "Apple",
+  "Dell",
+  "HP",
+  "Samsung",
+  "Lenovo",
+  "Microsoft",
+  "Asus",
 ];
 
 export const Brands = () => {
-  const duplicatedLogos = [...brandLogos, ...brandLogos];
+  const duplicatedNames = [...brandNames, ...brandNames];
 
   return (
     <section className="py-16 bg-background">
@@ -26,13 +26,11 @@ export const Brands = () => {
           }}
         >
           <div className="flex w-max animate-[scroll_40s_linear_infinite]">
-            {duplicatedLogos.map((brand, index) => (
+            {duplicatedNames.map((name, index) => (
               <div key={index} className="flex-shrink-0 w-64 h-20 flex items-center justify-center">
-                <img
-                  src={brand.logo}
-                  alt={brand.name}
-                  className="h-10 w-auto object-contain opacity-70 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                />
+                <span className="text-4xl font-bold text-muted-foreground/60 transition-colors duration-300 hover:text-foreground/90">
+                  {name}
+                </span>
               </div>
             ))}
           </div>
