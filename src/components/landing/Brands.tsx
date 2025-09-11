@@ -1,11 +1,3 @@
-const brandLogos = [
-  { name: "Apple", logo: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/apple-logo-white.svg" },
-  { name: "Dell", logo: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/dell-logo-white.svg" },
-  { name: "HP", logo: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/hp-logo-white.svg" },
-  { name: "Samsung", logo: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/samsung-logo-white.svg" },
-  { name: "Lenovo", logo: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/lenovo-logo-white.svg" },
-];
-
 export const Brands = () => {
   return (
     <section className="py-12 bg-background">
@@ -15,16 +7,12 @@ export const Brands = () => {
             Trabalhamos com as melhores marcas
           </h3>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center">
-          {brandLogos.map((brand) => (
-            <div key={brand.name} className="flex justify-center">
-              <img
-                src={brand.logo}
-                alt={brand.name}
-                className="h-10 w-auto object-contain opacity-70 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-              />
-            </div>
-          ))}
+        <div className="flex justify-center">
+          <img
+            src="/brands-banner.png"
+            alt="Equipamentos das melhores marcas como Apple, Dell, HP, Samsung e Lenovo"
+            className="w-full max-w-5xl mx-auto"
+          />
         </div>
       </div>
     </section>
