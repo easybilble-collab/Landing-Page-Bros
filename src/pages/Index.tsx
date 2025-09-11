@@ -4,6 +4,7 @@ import { Problems } from "@/components/landing/Problems";
 import { Solutions } from "@/components/landing/Solutions";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { Clients } from "@/components/landing/Clients";
+import { Testimonials } from "@/components/landing/Testimonials";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const Index = () => {
@@ -16,7 +17,7 @@ const Index = () => {
         <Solutions />
         <HowItWorks />
         <Clients />
-        {/* As próximas seções serão adicionadas aqui */}
+        <Testimonials />
       </main>
       <footer className="py-6 bg-secondary">
         <MadeWithDyad />

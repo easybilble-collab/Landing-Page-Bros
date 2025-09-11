@@ -22,14 +22,14 @@ const slides = [
     price: "43,99",
     icon: <Tablet className="h-12 w-12" />,
     gradient: "from-green-400 to-blue-500",
-    image: null,
+    image: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/tablet.png",
   },
   {
     category: "Smartphones",
     price: "32,99",
     icon: <SmartphoneIcon className="h-12 w-12" />,
     gradient: "from-yellow-400 to-orange-500",
-    image: null,
+    image: "https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/smartphone.png",
   },
 ];
 
@@ -38,19 +38,20 @@ export const Hero = () => {
     <section className="relative pt-20 bg-background">
       <Carousel
         className="w-full"
-        plugins={[Autoplay({ delay: 4000, stopOnInteraction: false })]}
+        plugins={[Autoplay({ delay: 5000, stopOnInteraction: true })]}
         opts={{ loop: true }}
       >
         <CarouselContent>
           {slides.map((slide, index) => (
             <CarouselItem key={index}>
               <div
-                className={`relative flex h-[70vh] min-h-[500px] w-full items-center justify-center text-white bg-gradient-to-br ${slide.gradient} overflow-hidden`}
+                className={`relative flex h-[70vh] min-h-[500px] w-full items-center text-white bg-gradient-to-br ${slide.gradient} overflow-hidden`}
               >
-                <div className="container mx-auto px-4 md:px-6 text-center z-10">
+                <div className="absolute inset-0 bg-black/30 z-10" />
+                <div className="container mx-auto px-4 md:px-6 text-center z-20">
                   <div className="flex flex-col items-center gap-4">
                     {slide.icon}
-                    <h1 className="text-4xl md:text-6xl font-bold tracking-tighter">
+                    <h1 className="text-4xl md:text-6xl font-bold tracking-tighter drop-shadow-lg">
                       {slide.category}
                     </h1>
                     <div className="relative">
@@ -75,15 +76,15 @@ export const Hero = () => {
                   <img
                     src={slide.image}
                     alt={slide.category}
-                    className="absolute bottom-0 right-0 md:right-10 h-1/2 md:h-2/3 object-contain hidden lg:block pointer-events-none"
+                    className="absolute inset-0 w-full h-full object-cover object-center z-0"
                   />
                 )}
               </div>
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 text-white z-20" />
-        <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 text-white z-20" />
+        <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 text-white z-30" />
+        <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 text-white z-30" />
       </Carousel>
       <div className="bg-secondary py-8">
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-center gap-4 px-4 md:px-6">
