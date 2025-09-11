@@ -5,9 +5,9 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 const navLinks = [
   "Equipamentos",
-  "Soluções",
-  "Preços",
-  "FAQ",
+  "Como Funciona",
+  "Planos",
+  "Contato",
 ];
 
 export const Header = () => {
@@ -38,7 +38,7 @@ export const Header = () => {
                   </a>
                 ))}
                 <Button variant="outline">Login</Button>
-                <Button>Comece Agora</Button>
+                <Button>Ver Planos</Button>
               </nav>
             </SheetContent>
           </Sheet>
@@ -54,7 +54,7 @@ export const Header = () => {
               </a>
             ))}
             <Button variant="outline">Login</Button>
-            <Button>Comece Agora</Button>
+            <Button>Ver Planos</Button>
           </nav>
         )}
       </div>

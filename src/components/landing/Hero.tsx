@@ -6,13 +6,13 @@ export const Hero = () => {
       <div className="container mx-auto px-4 md:px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div className="text-center lg:text-left">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-tight">
-            Acelere o Crescimento da Sua Empresa
+            Sua empresa, equipada para o futuro. Sem burocracia.
           </h1>
           <p className="mt-6 max-w-xl mx-auto lg:mx-0 text-lg text-muted-foreground">
-            Equipamentos de ponta para sua equipe, sem o alto custo de aquisição. Tenha acesso à melhor tecnologia e pague apenas pelo uso.
+            Alugue os melhores notebooks, monitores e equipamentos para sua equipe. Foco no que importa: o crescimento do seu negócio.
           </p>
           <Button size="lg" className="mt-8">
-            Solicite uma Proposta
+            Fale Conosco
           </Button>
         </div>
         <div className="relative">

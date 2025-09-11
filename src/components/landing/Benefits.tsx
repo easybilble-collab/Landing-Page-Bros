@@ -2,20 +2,20 @@ import { CheckCircle2 } from "lucide-react";
 
 const benefits = [
   {
-    title: "Flexibilidade Financeira",
-    description: "Libere seu capital de giro. Em vez de imobilizar dezenas de milhares de reais em ativos, pague uma pequena fração mensal.",
+    title: "Capital livre para investir",
+    description: "Mantenha o fluxo de caixa e invista no que realmente impulsiona seu crescimento, não em ativos que depreciam.",
   },
   {
-    title: "Tecnologia Sempre de Ponta",
-    description: "Esqueça a obsolescência. Faça upgrades para os últimos lançamentos facilmente, mantendo sua equipe sempre produtiva.",
+    title: "Sempre com o melhor hardware",
+    description: "Sua equipe merece as melhores ferramentas. Ofereça os últimos lançamentos e troque sempre que precisar, sem complicação.",
   },
   {
-    title: "Manutenção e Suporte Inclusos",
-    description: "Deu problema? Resolvemos em tempo recorde, sem custos extras. Seu foco fica 100% no seu negócio.",
+    title: "Suporte ágil que não te deixa na mão",
+    description: "Qualquer problema, uma solução rápida. Nosso time de especialistas garante que sua operação nunca pare.",
   },
   {
-    title: "Escalabilidade Sob Demanda",
-    description: "Contratou mais gente? Expanda sua operação em dias, não em meses. Adicione ou remova equipamentos conforme sua necessidade.",
+    title: "Escale sua equipe sem dor de cabeça",
+    description: "O time cresceu? Entregamos os novos equipamentos em tempo recorde. Simples, rápido e na medida da sua necessidade.",
   },
 ];
 
@@ -25,7 +25,7 @@ export const Benefits = () => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold">
-            A Vantagem Inteligente: Alugue vs. Compre
+            Por que alugar é a decisão mais inteligente
           </h2>
           <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
             Veja por que líderes de mercado estão abandonando a compra de ativos de TI.
