@@ -1,7 +1,6 @@
 import { Header } from "@/components/landing/Header";
-import { DynamicBanner } from "@/components/landing/DynamicBanner";
-import { Problems } from "@/components/landing/Problems";
-import { Solution } from "@/components/landing/Solution";
+import { Hero } from "@/components/landing/Hero";
+import { WhyBros } from "@/components/landing/WhyBros";
 import { FiscalBenefits } from "@/components/landing/FiscalBenefits";
 import { ContractOptions } from "@/components/landing/ContractOptions";
 import { Statistics } from "@/components/landing/Statistics";
@@ -15,13 +14,12 @@ const Index = () => {
     <div className="bg-background text-foreground">
       <Header />
       <main>
-        <DynamicBanner />
-        <Problems />
-        <Solution />
-        <FiscalBenefits />
-        <ContractOptions />
+        <Hero />
+        <WhyBros />
         <Statistics />
+        <FiscalBenefits />
         <Testimonials />
+        <ContractOptions />
         <FAQ />
         <FinalCTA />
       </main>

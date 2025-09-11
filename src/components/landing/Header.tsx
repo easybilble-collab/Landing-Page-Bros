@@ -1,15 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Search, User, Phone } from "lucide-react";
+import { Menu, Phone } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-const navLinks = [
-  "Produtos e Serviços",
-  "Soluções Digitais",
-  "Por tipo de Empresa",
-  "Ajuda e Benefícios",
-  "Melhores Ofertas",
-];
+const navLinks = ["Soluções", "Empresas", "Benefícios", "Ofertas"];
 
 export const Header = () => {
   const isMobile = useIsMobile();
@@ -40,10 +34,7 @@ export const Header = () => {
                     {link}
                   </a>
                 ))}
-                <div className="flex flex-col gap-4 mt-4">
-                  <Button variant="outline"><User className="mr-2 h-4 w-4" /> Login</Button>
-                  <Button><Phone className="mr-2 h-4 w-4" /> Fale com um Consultor</Button>
-                </div>
+                <Button className="mt-4"><Phone className="mr-2 h-4 w-4" /> Fale com um Consultor</Button>
               </nav>
             </SheetContent>
           </Sheet>
@@ -60,11 +51,9 @@ export const Header = () => {
                 </a>
               ))}
             </nav>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon"><Search className="h-5 w-5" /></Button>
-              <Button variant="ghost"><User className="mr-2 h-4 w-4" /> Login</Button>
-              <Button><Phone className="mr-2 h-4 w-4" /> Fale com um Consultor</Button>
-            </div>
+            <Button>
+              <Phone className="mr-2 h-4 w-4" /> Fale com um Consultor
+            </Button>
           </div>
         )}
       </div>
