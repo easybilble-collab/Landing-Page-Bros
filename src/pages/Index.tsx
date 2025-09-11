@@ -8,6 +8,7 @@ import { Testimonials } from "@/components/landing/Testimonials";
 import { FAQ } from "@/components/landing/FAQ";
 import { FinalCTA } from "@/components/landing/FinalCTA";
 import { Footer } from "@/components/landing/Footer";
+import { CostComparison } from "@/components/calculator/CostComparison";
 
 const Index = () => {
   return (
@@ -16,6 +17,7 @@ const Index = () => {
       <main>
         <Hero />
         <WhyBros />
+        <CostComparison />
         <Statistics />
         <FiscalBenefits />
         <Testimonials />
