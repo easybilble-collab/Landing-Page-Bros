@@ -18,7 +18,7 @@ export const Hero = () => {
         <div className="relative">
           <div className="absolute -inset-4 bg-primary/20 rounded-full blur-3xl opacity-50"></div>
           <img
-            src="https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/premium-devices-mockup-dark.png"
+            src="https://images.pexels.com/photos/1029757/pexels-photo-1029757.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
             alt="MacBook Pro, iPhone e outros notebooks premium disponíveis para aluguel"
             className="relative w-full max-w-2xl mx-auto"
           />

@@ -34,7 +34,7 @@ export const Benefits = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
           <div className="relative rounded-lg overflow-hidden aspect-video">
              <img 
-                src="https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/modern-office-collaboration.jpg" 
+                src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
                 alt="Equipe produtiva colaborando em um escritório moderno com equipamentos de ponta" 
                 className="w-full h-full object-cover"
               />
