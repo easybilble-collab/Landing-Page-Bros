@@ -1,4 +1,3 @@
-import { Card, CardTitle } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
 
 const benefits = [
@@ -32,16 +31,25 @@ export const Benefits = () => {
             Veja por que líderes de mercado estão abandonando a compra de ativos de TI.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {benefits.map((benefit, index) => (
-            <div key={index} className="flex items-start gap-4">
-              <CheckCircle2 className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
-              <div>
-                <h3 className="text-xl font-semibold">{benefit.title}</h3>
-                <p className="text-muted-foreground mt-1">{benefit.description}</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+          <div className="relative rounded-lg overflow-hidden aspect-video">
+             <img 
+                src="https://cdn.jsdelivr.net/gh/dyad-sh/dyad-assets@main/images/modern-office-collaboration.jpg" 
+                alt="Equipe produtiva colaborando em um escritório moderno com equipamentos de ponta" 
+                className="w-full h-full object-cover"
+              />
+          </div>
+          <div className="grid grid-cols-1 gap-8">
+            {benefits.map((benefit, index) => (
+              <div key={index} className="flex items-start gap-4">
+                <CheckCircle2 className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="text-xl font-semibold">{benefit.title}</h3>
+                  <p className="text-muted-foreground mt-1">{benefit.description}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
