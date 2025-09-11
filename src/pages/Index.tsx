@@ -1,10 +1,13 @@
 import { Header } from "@/components/landing/Header";
-import { Hero } from "@/components/landing/Hero";
-import { Brands } from "@/components/landing/Brands";
-import { Benefits } from "@/components/landing/Benefits";
-import { HowItWorks } from "@/components/landing/HowItWorks";
+import { DynamicBanner } from "@/components/landing/DynamicBanner";
+import { Problems } from "@/components/landing/Problems";
+import { Solution } from "@/components/landing/Solution";
+import { FiscalBenefits } from "@/components/landing/FiscalBenefits";
+import { ContractOptions } from "@/components/landing/ContractOptions";
+import { Statistics } from "@/components/landing/Statistics";
 import { Testimonials } from "@/components/landing/Testimonials";
-import { CTA } from "@/components/landing/CTA";
+import { FAQ } from "@/components/landing/FAQ";
+import { FinalCTA } from "@/components/landing/FinalCTA";
 import { Footer } from "@/components/landing/Footer";
 
 const Index = () => {
@@ -12,12 +15,15 @@ const Index = () => {
     <div className="bg-background text-foreground">
       <Header />
       <main>
-        <Hero />
-        <Brands />
-        <Benefits />
-        <HowItWorks />
+        <DynamicBanner />
+        <Problems />
+        <Solution />
+        <FiscalBenefits />
+        <ContractOptions />
+        <Statistics />
         <Testimonials />
-        <CTA />
+        <FAQ />
+        <FinalCTA />
       </main>
       <Footer />
     </div>
