@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Calculator, TrendingUp, AlertCircle, Gem, HelpCircle } from 'lucide-react';
+import { Calculator, TrendingUp, Gem, HelpCircle } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -14,47 +14,35 @@ const PIS_COFINS_RATE = 0.0925;
 const CSLL_RATE = 0.09;
 const IRPJ_BASE_RATE = 0.15;
 const IRPJ_ADDITIONAL_RATE = 0.10;
-const MONTHLY_PROFIT_THRESHOLD_FOR_ADDITIONAL_IRPJ = 20000; // Limite mensal por RIR
+const MONTHLY_PROFIT_THRESHOLD_FOR_ADDITIONAL_IRPJ = 20000;
 
 const IT_ASSET_DEPRECIATION_MONTHS = 60; // 5 anos (Receita Federal)
-const DEFAULT_MAINTENANCE_RATE = 0.15; // 15% ao ano sobre o valor do ativo (mais realista)
+const DEFAULT_MAINTENANCE_RATE = 0.15; // 15% ao ano sobre o valor do ativo
 const DEFAULT_RESIDUAL_VALUE_RATE = 0.15; // 15% do valor de compra após o período
 
 export const CostComparison = () => {
-  // Valores padrão ajustados para um cenário comum de notebook corporativo
   const [equipmentCost, setEquipmentCost] = useState(6000);
   const [rentalMonthly, setRentalMonthly] = useState(220);
   const [duration, setDuration] = useState(36);
   const [monthlyProfit, setMonthlyProfit] = useState(80000);
   const [equipmentQty, setEquipmentQty] = useState(10);
 
-  // --- CÁLCULOS DINÂMICOS ---
   const irpjRate = monthlyProfit > MONTHLY_PROFIT_THRESHOLD_FOR_ADDITIONAL_IRPJ ? IRPJ_BASE_RATE + IRPJ_ADDITIONAL_RATE : IRPJ_BASE_RATE;
   const totalTaxOnProfitRate = irpjRate + CSLL_RATE;
 
   // --- ANÁLISE DE CUSTO: COMPRA (CAPEX) ---
   const totalPurchaseValue = equipmentCost * equipmentQty;
   const totalMaintenanceCost = (equipmentCost * DEFAULT_MAINTENANCE_RATE / 12) * duration * equipmentQty;
-  
-  // Despesas Dedutíveis na Compra
   const totalDepreciation = (totalPurchaseValue / IT_ASSET_DEPRECIATION_MONTHS) * duration;
   const deductibleExpensesOnPurchase = totalDepreciation + totalMaintenanceCost;
-  
-  // Benefício Fiscal na Compra (apenas sobre despesas)
   const taxBenefitOnPurchase = deductibleExpensesOnPurchase * totalTaxOnProfitRate;
-  
-  // Custo Líquido da Compra (TCO - Total Cost of Ownership)
   const residualValue = totalPurchaseValue * DEFAULT_RESIDUAL_VALUE_RATE;
   const netPurchaseCost = (totalPurchaseValue + totalMaintenanceCost) - residualValue - taxBenefitOnPurchase;
 
   // --- ANÁLISE DE CUSTO: LOCAÇÃO (OPEX) ---
   const totalRentalValue = rentalMonthly * duration * equipmentQty;
-  
-  // Benefício Fiscal na Locação (Crédito + Dedução)
-  const pisCofinsCredit = totalRentalValue * PIS_COFINS_RATE; // Crédito direto
-  const taxBenefitOnRental = totalRentalValue * totalTaxOnProfitRate; // Dedução da base de cálculo
-  
-  // Custo Líquido da Locação
+  const pisCofinsCredit = totalRentalValue * PIS_COFINS_RATE;
+  const taxBenefitOnRental = totalRentalValue * totalTaxOnProfitRate;
   const netRentalCost = totalRentalValue - pisCofinsCredit - taxBenefitOnRental;
 
   // --- RESULTADO FINAL ---
@@ -65,17 +53,17 @@ export const CostComparison = () => {
       <section className="py-12 bg-secondary">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold">Análise Fiscal: Compra (CAPEX) vs. Locação (OPEX)</h2>
+            <h2 className="text-3xl font-bold">Calculadora de Custo-Benefício: Comprar vs. Alugar</h2>
             <p className="text-muted-foreground mt-2">
-              Simulador para empresas no regime de Lucro Real, seguindo as normas da Receita Federal.
+              Descubra qual opção é financeiramente mais vantajosa para sua empresa no regime de Lucro Real.
             </p>
           </div>
 
-          <Alert className="mb-6 bg-amber-50 border-amber-200">
-            <Gem className="h-4 w-4 text-amber-700" />
-            <AlertTitle className="text-amber-800">O Ponto Crucial: Crédito de PIS/COFINS</AlertTitle>
-            <AlertDescription className="text-amber-700">
-              Na locação (serviço), sua empresa gera um crédito de 9,25% sobre o valor total, reduzindo o imposto a pagar. Na compra de ativos (imobilizado), esse benefício não existe. Esta é a maior vantagem fiscal direta.
+          <Alert className="mb-6 bg-blue-50 border-blue-200">
+            <Gem className="h-4 w-4 text-blue-700" />
+            <AlertTitle className="text-blue-800">A Vantagem Chave da Locação</AlertTitle>
+            <AlertDescription className="text-blue-700">
+              Alugar é um serviço, o que permite abater 100% do valor como despesa e ainda gerar créditos de PIS/COFINS. Comprar é um investimento (ativo), com benefícios fiscais menores e mais lentos (via depreciação).
             </AlertDescription>
           </Alert>
 
@@ -103,7 +91,7 @@ export const CostComparison = () => {
                 </div>
                 <div>
                   <Label>Prazo do Contrato ({duration} meses)</Label>
-                  <Slider value={[duration]} min={12} max={60} step={1} onValue-change={(v) => setDuration(v[0])} />
+                  <Slider value={[duration]} min={12} max={60} step={1} onValueChange={(v) => setDuration(v[0])} />
                 </div>
                 <div>
                   <Label>Lucro Médio Mensal (Base IRPJ/CSLL)</Label>
@@ -120,56 +108,47 @@ export const CostComparison = () => {
               <CardHeader className="p-0 mb-6">
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-6 w-6" />
-                  Resultado da Análise Fiscal ({duration} meses)
+                  Comparativo de Custos em {duration} meses
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0 space-y-4">
                 {/* COMPRA */}
                 <div className="bg-background/10 p-4 rounded-lg">
-                  <h3 className="font-bold text-lg">Cenário Compra (CAPEX)</h3>
+                  <h3 className="font-bold text-lg">Custo Total de Propriedade (Compra)</h3>
                   <ul className="text-sm mt-2 space-y-1">
-                    <li className="flex justify-between"><span>Custo Total (Ativo + Manutenção)</span> <span>R$ {(totalPurchaseValue + totalMaintenanceCost).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</span></li>
-                    <li className="flex justify-between items-center">
-                      <span>Despesas Dedutíveis (Depreciação + Manut.)</span>
-                      <Tooltip>
-                        <TooltipTrigger><HelpCircle className="h-4 w-4 opacity-70" /></TooltipTrigger>
-                        <TooltipContent>Apenas estas despesas reduzem a base de cálculo do IRPJ/CSLL.</TooltipContent>
-                      </Tooltip>
-                      <span>R$ {deductibleExpensesOnPurchase.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</span>
-                    </li>
-                    <li className="flex justify-between text-green-300"><span>(-) Benefício Fiscal (IRPJ/CSLL)</span> <span>R$ {taxBenefitOnPurchase.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</span></li>
+                    <li className="flex justify-between"><span>Custo Bruto (Ativo + Manutenção)</span> <span>R$ {(totalPurchaseValue + totalMaintenanceCost).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</span></li>
+                    <li className="flex justify-between text-green-300"><span>(-) Benefícios Fiscais</span> <span>R$ {taxBenefitOnPurchase.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</span></li>
                     <li className="flex justify-between border-t border-white/20 pt-1 mt-1 font-bold"><span>Custo Líquido Final (TCO)</span> <span>R$ {netPurchaseCost.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</span></li>
                   </ul>
                 </div>
 
                 {/* LOCAÇÃO */}
                 <div className="bg-background/10 p-4 rounded-lg">
-                  <h3 className="font-bold text-lg">Cenário Locação (OPEX)</h3>
+                  <h3 className="font-bold text-lg">Custo Total de Operação (Aluguel)</h3>
                   <ul className="text-sm mt-2 space-y-1">
-                    <li className="flex justify-between"><span>Custo Total (Aluguel)</span> <span>R$ {totalRentalValue.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</span></li>
+                    <li className="flex justify-between"><span>Custo Bruto (Aluguel)</span> <span>R$ {totalRentalValue.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</span></li>
                     <li className="flex justify-between items-center text-green-300">
-                      <span>(-) Crédito PIS/COFINS (9,25%)</span>
+                      <span>(-) Benefícios Fiscais (Créditos + Deduções)</span>
                       <Tooltip>
                         <TooltipTrigger><HelpCircle className="h-4 w-4 opacity-70" /></TooltipTrigger>
-                        <TooltipContent>Benefício direto, reduz o valor do imposto a pagar.</TooltipContent>
+                        <TooltipContent>Inclui crédito de PIS/COFINS e dedução de IRPJ/CSLL.</TooltipContent>
                       </Tooltip>
-                      <span>R$ {pisCofinsCredit.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</span>
+                      <span>R$ {(pisCofinsCredit + taxBenefitOnRental).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</span>
                     </li>
-                    <li className="flex justify-between text-green-300"><span>(-) Benefício Fiscal (IRPJ/CSLL)</span> <span>R$ {taxBenefitOnRental.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</span></li>
                     <li className="flex justify-between border-t border-white/20 pt-1 mt-1 font-bold"><span>Custo Líquido Final</span> <span>R$ {netRentalCost.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</span></li>
                   </ul>
                 </div>
 
                 {/* CONCLUSÃO */}
                 <div className="bg-green-400/20 p-4 rounded-lg text-center">
-                  <h3 className="text-sm font-medium text-green-200">Economia Líquida com a Locação</h3>
+                  <h3 className="text-sm font-medium text-green-200">Veredito: Custo-Benefício</h3>
                   <p className="text-3xl font-bold mt-1 text-white">
                     R$ {savingsWithRental.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}
                   </p>
                   <p className="text-sm mt-1 text-green-200">
                     {savingsWithRental > 0 ? 
-                      `A locação é ${((savingsWithRental / netPurchaseCost) * 100).toFixed(1)}% mais eficiente que a compra.` : 
-                      "Neste cenário, a compra é mais vantajosa."}
+                      `de economia total com a locação. (${((savingsWithRental / netPurchaseCost) * 100).toFixed(1)}% mais eficiente)` : 
+                      "Neste cenário, a compra parece mais vantajosa. Tente outros valores."}
                   </p>
                 </div>
               </CardContent>
