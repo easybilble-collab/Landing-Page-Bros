@@ -17,12 +17,13 @@ const IRPJ_ADDITIONAL_RATE = 0.10;
 const MONTHLY_PROFIT_THRESHOLD_FOR_ADDITIONAL_IRPJ = 20000; // Limite mensal por RIR
 
 const IT_ASSET_DEPRECIATION_MONTHS = 60; // 5 anos (Receita Federal)
-const DEFAULT_MAINTENANCE_RATE = 0.12; // 12% ao ano sobre o valor do ativo
+const DEFAULT_MAINTENANCE_RATE = 0.15; // 15% ao ano sobre o valor do ativo (mais realista)
 const DEFAULT_RESIDUAL_VALUE_RATE = 0.15; // 15% do valor de compra após o período
 
 export const CostComparison = () => {
-  const [equipmentCost, setEquipmentCost] = useState(5000);
-  const [rentalMonthly, setRentalMonthly] = useState(180);
+  // Valores padrão ajustados para um cenário comum de notebook corporativo
+  const [equipmentCost, setEquipmentCost] = useState(6000);
+  const [rentalMonthly, setRentalMonthly] = useState(220);
   const [duration, setDuration] = useState(36);
   const [monthlyProfit, setMonthlyProfit] = useState(80000);
   const [equipmentQty, setEquipmentQty] = useState(10);
@@ -102,7 +103,7 @@ export const CostComparison = () => {
                 </div>
                 <div>
                   <Label>Prazo do Contrato ({duration} meses)</Label>
-                  <Slider value={[duration]} min={12} max={60} step={1} onValueChange={(v) => setDuration(v[0])} />
+                  <Slider value={[duration]} min={12} max={60} step={1} onValue-change={(v) => setDuration(v[0])} />
                 </div>
                 <div>
                   <Label>Lucro Médio Mensal (Base IRPJ/CSLL)</Label>

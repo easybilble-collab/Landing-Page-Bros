@@ -3,9 +3,9 @@ import { TrendingDown, Clock, Users, Globe } from "lucide-react";
 const stats = [
   {
     icon: <TrendingDown className="h-12 w-12 text-white" />,
-    value: "40%",
-    title: "Redução Média de Custos",
-    description: "Economia comprovada vs. compra de equipamentos",
+    value: "Significativa",
+    title: "Redução de Custos",
+    description: "Compare o custo líquido e veja a economia fiscal. Calcule abaixo!",
   },
   {
     icon: <Clock className="h-12 w-12 text-white" />,
