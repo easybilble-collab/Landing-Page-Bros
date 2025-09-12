@@ -1,27 +1,27 @@
 "use client";
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Calculator, DollarSign, RefreshCw, TrendingUp, AlertCircle, Gem } from 'lucide-react';
+import { Calculator, TrendingUp, AlertCircle, Gem } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-// Dados atualizados com cálculos corretos
+// Dados atualizados com cálculos realistas para o mercado brasileiro
 const MARKET_DATA = {
   notebook: {
     purchasePrice: 4500,
     rentalMonthly: 150,
-    maintenanceRate: 8, // % do valor ao ano
+    maintenanceRate: 0.15, // 15% do valor ao ano (custo de suporte, reparos, etc.)
+    depreciationPeriodMonths: 60, // 5 anos, conforme legislação fiscal
     taxRates: {
       irpj: 0.25,    // 15% + 10% adicional (para lucros > 60k/mês)
       csll: 0.09,
       pisCofins: 0.0925,
       total: 0.4325  // Soma total dos impostos (25% + 9% + 9.25%)
     },
-    residualValue: 0.2 // 20% do valor após 3 anos
+    residualValueRate: 0.2 // 20% do valor de revenda após o período
   }
 };
 
@@ -32,27 +32,35 @@ export const CostComparison = () => {
   const [monthlyProfit, setMonthlyProfit] = useState(100000);
   const [equipmentQty, setEquipmentQty] = useState(10);
 
-  // Cálculos CORRETOS para Lucro Real:
+  // Alíquota de imposto baseada no lucro
   const taxRate = monthlyProfit > 60000 ? 
     MARKET_DATA.notebook.taxRates.total : 
     MARKET_DATA.notebook.taxRates.total - 0.10;
 
-  // 1. Custo de COMPRA (considerando apenas depreciação linear)
-  const depreciationPeriod = Math.min(duration, 36); // Máximo 3 anos para equipamentos
-  const monthlyDepreciation = equipmentCost / 36; // Depreciação em 3 anos
-  const purchaseTaxBenefit = monthlyDepreciation * depreciationPeriod * taxRate;
-  
-  const residualValue = equipmentCost * MARKET_DATA.notebook.residualValue;
-  const purchaseNetCost = (equipmentCost - residualValue) - purchaseTaxBenefit;
+  // --- CÁLCULO DE COMPRA (CORRIGIDO) ---
+  // 1. Custo de Manutenção
+  const annualMaintenanceCost = equipmentCost * MARKET_DATA.notebook.maintenanceRate;
+  const totalMaintenanceCost = annualMaintenanceCost * (duration / 12);
+  const maintenanceTaxBenefit = totalMaintenanceCost * taxRate;
+  const netMaintenanceCost = totalMaintenanceCost - maintenanceTaxBenefit;
 
-  // 2. Custo de LOCAÇÃO (100% dedutível como despesa)
+  // 2. Benefício da Depreciação (limitado a 5 anos)
+  const monthlyDepreciation = equipmentCost / MARKET_DATA.notebook.depreciationPeriodMonths;
+  const totalDepreciationInPeriod = monthlyDepreciation * duration;
+  const depreciationTaxBenefit = totalDepreciationInPeriod * taxRate;
+
+  // 3. Custo Líquido da Compra (Total Cost of Ownership)
+  const residualValue = equipmentCost * MARKET_DATA.notebook.residualValueRate;
+  const netAssetCost = equipmentCost - residualValue - depreciationTaxBenefit;
+  const purchaseNetCost = netAssetCost + netMaintenanceCost;
+
+  // --- CÁLCULO DE LOCAÇÃO ---
   const rentalGrossCost = rentalMonthly * duration;
   const rentalTaxBenefit = rentalGrossCost * taxRate;
   const rentalNetCost = rentalGrossCost - rentalTaxBenefit;
 
-  // 3. Comparação final
+  // --- COMPARAÇÃO FINAL ---
   const savings = purchaseNetCost - rentalNetCost;
-  const monthlySavings = savings / duration;
 
   return (
     <section className="py-12 bg-secondary">
@@ -68,7 +76,7 @@ export const CostComparison = () => {
           <Gem className="h-4 w-4 text-blue-600" />
           <AlertTitle>Por que a locação é vantajosa?</AlertTitle>
           <AlertDescription>
-            No Lucro Real, você deduz 100% das parcelas como despesa, enquanto na compra só aproveita a depreciação.
+            Na locação, 100% do valor é dedutível como despesa. Na compra, você deduz apenas a depreciação (parcial) e custos de manutenção, tornando o benefício fiscal menor.
           </AlertDescription>
         </Alert>
 
@@ -113,40 +121,42 @@ export const CostComparison = () => {
                     value={rentalMonthly}
                     onChange={(e) => setRentalMonthly(Number(e.target.value))}
                     min={50}
-                    max={300}
+                    max={500}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {((rentalMonthly/equipmentCost)*100).toFixed(1)}% do valor mensal
+                  {((rentalMonthly/equipmentCost)*100).toFixed(1)}% do valor do ativo/mês
                 </p>
               </div>
 
               <div>
-                <Label>Prazo (meses)</Label>
+                <Label>Prazo do contrato (meses)</Label>
                 <Slider
                   value={[duration]}
-                  min={6}
+                  min={12}
                   max={60}
                   step={1}
                   onValueChange={(value) => setDuration(value[0])}
                 />
                 <div className="text-sm text-muted-foreground mt-1">
-                  {duration} meses ({Math.floor(duration/12)} anos)
+                  {duration} meses ({Math.floor(duration/12)} anos e {duration % 12} meses)
                 </div>
               </div>
 
               <div>
                 <Label>Lucro mensal da empresa (R$)</Label>
                 <Input
+                  type="number"
                   value={monthlyProfit}
                   onChange={(e) => setMonthlyProfit(Number(e.target.value))}
                   min={20000}
-                  max={500000}
+                  max={1000000}
+                  step={10000}
                 />
                 <p className="text-xs text-muted-foreground mt-1">
                   {monthlyProfit > 60000 ? 
-                    "Sujeito a IRPJ adicional (25% total)" : 
-                    "Taxa normal de IRPJ (15%)"}
+                    "Acima de R$60k, IRPJ tem adicional de 10%" : 
+                    "Abaixo de R$60k, IRPJ padrão de 15%"}
                 </p>
               </div>
             </CardContent>
@@ -156,7 +166,7 @@ export const CostComparison = () => {
             <CardHeader className="p-0 mb-6">
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="h-6 w-6" />
-                Resultado Financeiro
+                Resultado Financeiro (Custo Total no Período)
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0 space-y-6">
@@ -164,32 +174,33 @@ export const CostComparison = () => {
                 <div className="bg-background/10 p-4 rounded-lg">
                   <h3 className="text-sm font-medium">Compra (Líquido)</h3>
                   <p className="text-2xl font-bold mt-1">
-                    R$ {(purchaseNetCost * equipmentQty).toLocaleString('pt-BR')}
+                    R$ {(purchaseNetCost * equipmentQty).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}
                   </p>
                   <p className="text-xs mt-2">
-                    Economia fiscal: R$ {(purchaseTaxBenefit * equipmentQty).toLocaleString('pt-BR')}
+                    Custo Ativo: R$ {(netAssetCost * equipmentQty).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}<br/>
+                    Manutenção: R$ {(netMaintenanceCost * equipmentQty).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}
                   </p>
                 </div>
                 <div className="bg-background/10 p-4 rounded-lg">
                   <h3 className="text-sm font-medium">Locação (Líquido)</h3>
                   <p className="text-2xl font-bold mt-1">
-                    R$ {(rentalNetCost * equipmentQty).toLocaleString('pt-BR')}
+                    R$ {(rentalNetCost * equipmentQty).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}
                   </p>
-                  <p className="text-xs mt-2">
-                    Economia fiscal: R$ {(rentalTaxBenefit * equipmentQty).toLocaleString('pt-BR')}
+                   <p className="text-xs mt-2">
+                    Economia fiscal total:<br/>R$ {(rentalTaxBenefit * equipmentQty).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}
                   </p>
                 </div>
               </div>
 
-              <div className="bg-background/10 p-4 rounded-lg">
-                <h3 className="text-sm font-medium">Vantagem da Locação</h3>
-                <p className="text-3xl font-bold mt-1 text-green-300">
-                  R$ {(savings * equipmentQty).toLocaleString('pt-BR')}
+              <div className="bg-green-400/20 p-4 rounded-lg text-center">
+                <h3 className="text-sm font-medium text-green-200">Economia com a Locação</h3>
+                <p className="text-3xl font-bold mt-1 text-white">
+                  R$ {(savings * equipmentQty).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}
                 </p>
-                <p className="text-sm mt-1">
-                  {monthlySavings > 0 ? 
-                    `Equivalente a R$ ${monthlySavings.toLocaleString('pt-BR')} por mês por equipamento` : 
-                    "Sem vantagem financeira"}
+                <p className="text-sm mt-1 text-green-200">
+                  {savings > 0 ? 
+                    `Sua empresa economiza ${((savings / purchaseNetCost) * 100).toFixed(1)}% no período` : 
+                    "Ajuste os valores para ver a economia"}
                 </p>
               </div>
 
@@ -217,9 +228,9 @@ export const CostComparison = () => {
 
               <Alert className="bg-background/10 border-white/20">
                 <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Exemplo Real</AlertTitle>
+                <AlertTitle>Nota</AlertTitle>
                 <AlertDescription className="text-xs">
-                  Para {equipmentQty} equipamentos em {duration} meses, a locação proporciona uma economia tributária de R$ {(rentalTaxBenefit * equipmentQty).toLocaleString('pt-BR')} contra R$ {(purchaseTaxBenefit * equipmentQty).toLocaleString('pt-BR')} da compra.
+                  Este é um cálculo simplificado. Custos como gerenciamento de ativos, descarte e o custo de oportunidade do capital não foram incluídos, mas aumentariam ainda mais a vantagem da locação.
                 </AlertDescription>
               </Alert>
             </CardContent>
