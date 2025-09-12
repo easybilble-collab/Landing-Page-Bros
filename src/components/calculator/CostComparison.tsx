@@ -9,63 +9,66 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-// Dados de mercado + tributação BR (2024)
+// Dados atualizados com cálculos corretos
 const MARKET_DATA = {
   notebook: {
     purchasePrice: 4500,
     rentalMonthly: 150,
-    maintenanceRate: 8,
-    refreshCycle: 3,
-    lifespan: 5,
+    maintenanceRate: 8, // % do valor ao ano
     taxRates: {
-      irpj: 0.15,       // IRPJ (15% + 10% adicional sobre lucro > R$60k/mês)
-      csll: 0.09,       // CSLL
-      pisCofins: 0.0925 // PIS/COFINS (regime cumulativo)
-    }
+      irpj: 0.25,    // 15% + 10% adicional (para lucros > 60k/mês)
+      csll: 0.09,
+      pisCofins: 0.0925,
+      total: 0.4325  // Soma total dos impostos (25% + 9% + 9.25%)
+    },
+    residualValue: 0.2 // 20% do valor após 3 anos
   }
 };
 
 export const CostComparison = () => {
-  const [equipmentCost, setEquipmentCost] = useState<number>(MARKET_DATA.notebook.purchasePrice);
-  const [rentalMonthly, setRentalMonthly] = useState<number>(MARKET_DATA.notebook.rentalMonthly);
-  const [duration, setDuration] = useState<number>(36);
-  const [monthlyProfit, setMonthlyProfit] = useState<number>(100000); // Lucro médio mensal da empresa
-  const [includeTax, setIncludeTax] = useState<boolean>(true);
+  const [equipmentCost, setEquipmentCost] = useState(MARKET_DATA.notebook.purchasePrice);
+  const [rentalMonthly, setRentalMonthly] = useState(MARKET_DATA.notebook.rentalMonthly);
+  const [duration, setDuration] = useState(36);
+  const [monthlyProfit, setMonthlyProfit] = useState(100000);
+  const [equipmentQty, setEquipmentQty] = useState(10);
 
-  // Cálculos tributários
-  const taxSavings = (value: number) => {
-    if (!includeTax) return 0;
-    const { irpj, csll, pisCofins } = MARKET_DATA.notebook.taxRates;
-    return value * (irpj + csll + pisCofins); // Economia tributária total
-  };
+  // Cálculos CORRETOS para Lucro Real:
+  const taxRate = monthlyProfit > 60000 ? 
+    MARKET_DATA.notebook.taxRates.total : 
+    MARKET_DATA.notebook.taxRates.total - 0.10;
 
-  // Cálculos para COMPRA
-  const depreciationPerMonth = equipmentCost / (MARKET_DATA.notebook.lifespan * 12);
-  const purchaseTaxBenefits = taxSavings(depreciationPerMonth * Math.min(duration, MARKET_DATA.notebook.lifespan * 12));
+  // 1. Custo de COMPRA (considerando apenas depreciação linear)
+  const depreciationPeriod = Math.min(duration, 36); // Máximo 3 anos para equipamentos
+  const monthlyDepreciation = equipmentCost / 36; // Depreciação em 3 anos
+  const purchaseTaxBenefit = monthlyDepreciation * depreciationPeriod * taxRate;
+  
+  const residualValue = equipmentCost * MARKET_DATA.notebook.residualValue;
+  const purchaseNetCost = (equipmentCost - residualValue) - purchaseTaxBenefit;
 
-  // Cálculos para LOCAÇÃO
-  const rentalTaxBenefits = taxSavings(rentalMonthly * duration);
+  // 2. Custo de LOCAÇÃO (100% dedutível como despesa)
+  const rentalGrossCost = rentalMonthly * duration;
+  const rentalTaxBenefit = rentalGrossCost * taxRate;
+  const rentalNetCost = rentalGrossCost - rentalTaxBenefit;
 
-  // Custo Líquido
-  const purchaseNetCost = equipmentCost - purchaseTaxBenefits;
-  const rentalNetCost = (rentalMonthly * duration) - rentalTaxBenefits;
+  // 3. Comparação final
   const savings = purchaseNetCost - rentalNetCost;
+  const monthlySavings = savings / duration;
 
   return (
     <section className="py-12 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold">Calculadora para Lucro Real</h2>
+          <h2 className="text-3xl font-bold">Vantagem Real da Locação</h2>
           <p className="text-muted-foreground mt-2">
-            Comparação com benefícios fiscais (IRPJ, CSLL, PIS/COFINS)
+            Cálculo preciso para empresas no Lucro Real
           </p>
         </div>
 
         <Alert className="mb-6 bg-blue-50 border-blue-200">
           <Gem className="h-4 w-4 text-blue-600" />
-          <AlertTitle>Vantagem Tributária</AlertTitle>
+          <AlertTitle>Por que a locação é vantajosa?</AlertTitle>
           <AlertDescription>
-            No Lucro Real, a locação é 100% dedutível como despesa operacional, reduzindo a base de cálculo dos impostos.
+            No Lucro Real, você deduz 100% das parcelas como despesa, enquanto na compra só aproveita a depreciação.
           </AlertDescription>
         </Alert>
 
@@ -74,32 +77,25 @@ export const CostComparison = () => {
             <CardHeader className="p-0 mb-6">
               <CardTitle className="flex items-center gap-2">
                 <Calculator className="h-6 w-6 text-primary" />
-                Parâmetros Financeiros
+                Configure seu Cenário
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0 space-y-6">
-              <div className="flex items-center gap-3">
-                <Label className="flex-1">Incluir benefícios fiscais?</Label>
-                <Button
-                  variant={includeTax ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setIncludeTax(true)}
-                >
-                  Sim
-                </Button>
-                <Button
-                  variant={!includeTax ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setIncludeTax(false)}
-                >
-                  Não
-                </Button>
+              <div>
+                <Label>Quantidade de equipamentos</Label>
+                <Input
+                  type="number"
+                  value={equipmentQty}
+                  onChange={(e) => setEquipmentQty(Number(e.target.value))}
+                  min={1}
+                  max={100}
+                />
               </div>
 
               <div>
-                <Label>Valor do equipamento (compra)</Label>
+                <Label>Valor unitário (compra)</Label>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="text-muted-foreground">R$</span>
+                  <span>R$</span>
                   <Input
                     value={equipmentCost}
                     onChange={(e) => setEquipmentCost(Number(e.target.value))}
@@ -110,9 +106,9 @@ export const CostComparison = () => {
               </div>
 
               <div>
-                <Label>Mensalidade de locação</Label>
+                <Label>Mensalidade (locação)</Label>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="text-muted-foreground">R$</span>
+                  <span>R$</span>
                   <Input
                     value={rentalMonthly}
                     onChange={(e) => setRentalMonthly(Number(e.target.value))}
@@ -121,7 +117,7 @@ export const CostComparison = () => {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Média: 3-5% do valor do equipamento/mês
+                  {((rentalMonthly/equipmentCost)*100).toFixed(1)}% do valor mensal
                 </p>
               </div>
 
@@ -133,27 +129,26 @@ export const CostComparison = () => {
                   max={60}
                   step={1}
                   onValueChange={(value) => setDuration(value[0])}
-                  className="mt-2"
                 />
                 <div className="text-sm text-muted-foreground mt-1">
                   {duration} meses ({Math.floor(duration/12)} anos)
                 </div>
               </div>
 
-              {includeTax && (
-                <div>
-                  <Label>Lucro mensal da empresa (R$)</Label>
-                  <Input
-                    value={monthlyProfit}
-                    onChange={(e) => setMonthlyProfit(Number(e.target.value))}
-                    min={20000}
-                    max={500000}
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Para cálculo do IRPJ adicional (10% sobre lucro acima de R$60k/mês)
-                  </p>
-                </div>
-              )}
+              <div>
+                <Label>Lucro mensal da empresa (R$)</Label>
+                <Input
+                  value={monthlyProfit}
+                  onChange={(e) => setMonthlyProfit(Number(e.target.value))}
+                  min={20000}
+                  max={500000}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {monthlyProfit > 60000 ? 
+                    "Sujeito a IRPJ adicional (25% total)" : 
+                    "Taxa normal de IRPJ (15%)"}
+                </p>
+              </div>
             </CardContent>
           </Card>
 
@@ -161,7 +156,7 @@ export const CostComparison = () => {
             <CardHeader className="p-0 mb-6">
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="h-6 w-6" />
-                Resultado Tributário
+                Resultado Financeiro
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0 space-y-6">
@@ -169,90 +164,67 @@ export const CostComparison = () => {
                 <div className="bg-background/10 p-4 rounded-lg">
                   <h3 className="text-sm font-medium">Compra (Líquido)</h3>
                   <p className="text-2xl font-bold mt-1">
-                    R$ {purchaseNetCost.toLocaleString('pt-BR', {maximumFractionDigits: 2})}
+                    R$ {(purchaseNetCost * equipmentQty).toLocaleString('pt-BR')}
                   </p>
-                  {includeTax && (
-                    <p className="text-xs mt-1">
-                      Economia fiscal: R$ {purchaseTaxBenefits.toLocaleString('pt-BR')}
-                    </p>
-                  )}
+                  <p className="text-xs mt-2">
+                    Economia fiscal: R$ {(purchaseTaxBenefit * equipmentQty).toLocaleString('pt-BR')}
+                  </p>
                 </div>
                 <div className="bg-background/10 p-4 rounded-lg">
                   <h3 className="text-sm font-medium">Locação (Líquido)</h3>
                   <p className="text-2xl font-bold mt-1">
-                    R$ {rentalNetCost.toLocaleString('pt-BR', {maximumFractionDigits: 2})}
+                    R$ {(rentalNetCost * equipmentQty).toLocaleString('pt-BR')}
                   </p>
-                  {includeTax && (
-                    <p className="text-xs mt-1">
-                      Economia fiscal: R$ {rentalTaxBenefits.toLocaleString('pt-BR')}
-                    </p>
-                  )}
+                  <p className="text-xs mt-2">
+                    Economia fiscal: R$ {(rentalTaxBenefit * equipmentQty).toLocaleString('pt-BR')}
+                  </p>
                 </div>
               </div>
 
               <div className="bg-background/10 p-4 rounded-lg">
                 <h3 className="text-sm font-medium">Vantagem da Locação</h3>
-                <p className={`text-3xl font-bold mt-1 ${savings > 0 ? 'text-green-300' : 'text-red-300'}`}>
-                  {savings > 0 ? 'R$ ' + savings.toLocaleString('pt-BR') : 'Sem vantagem'}
+                <p className="text-3xl font-bold mt-1 text-green-300">
+                  R$ {(savings * equipmentQty).toLocaleString('pt-BR')}
                 </p>
-                {includeTax && savings > 0 && (
-                  <p className="text-sm mt-1">
-                    Incluindo economia fiscal de {(savings/(purchaseNetCost+savings)*100).toFixed(1)}%
-                  </p>
-                )}
+                <p className="text-sm mt-1">
+                  {monthlySavings > 0 ? 
+                    `Equivalente a R$ ${monthlySavings.toLocaleString('pt-BR')} por mês por equipamento` : 
+                    "Sem vantagem financeira"}
+                </p>
               </div>
 
-              {includeTax && (
-                <div className="bg-background/10 p-4 rounded-lg">
-                  <h3 className="text-sm font-medium">Detalhes Tributários</h3>
-                  <ul className="mt-2 space-y-2 text-xs">
-                    <li className="flex justify-between">
-                      <span>Redução no IRPJ:</span>
-                      <span>15% {monthlyProfit > 60000 ? '+ 10% adicional' : ''}</span>
-                    </li>
-                    <li className="flex justify-between">
-                      <span>Redução na CSLL:</span>
-                      <span>9%</span>
-                    </li>
-                    <li className="flex justify-between">
-                      <span>Redução no PIS/COFINS:</span>
-                      <span>9.25%</span>
-                    </li>
-                    <li className="flex justify-between pt-2 mt-2 border-t border-white/20">
-                      <span>Total de economia fiscal:</span>
-                      <span className="font-bold">
-                        {(MARKET_DATA.notebook.taxRates.irpj + 
-                          MARKET_DATA.notebook.taxRates.csll + 
-                          MARKET_DATA.notebook.taxRates.pisCofins) * 100}%
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-              )}
+              <div className="bg-background/10 p-4 rounded-lg">
+                <h3 className="text-sm font-medium">Detalhes Tributários</h3>
+                <ul className="mt-2 space-y-1 text-xs">
+                  <li className="flex justify-between">
+                    <span>Alíquota efetiva total:</span>
+                    <span>{(taxRate * 100).toFixed(2)}%</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span>IRPJ:</span>
+                    <span>{(monthlyProfit > 60000 ? 25 : 15)}%</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span>CSLL:</span>
+                    <span>9%</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span>PIS/COFINS:</span>
+                    <span>9.25%</span>
+                  </li>
+                </ul>
+              </div>
 
-              <Button 
-                variant="secondary" 
-                className="w-full bg-white text-primary hover:bg-gray-100"
-                onClick={() => {
-                  setEquipmentCost(MARKET_DATA.notebook.purchasePrice);
-                  setRentalMonthly(MARKET_DATA.notebook.rentalMonthly);
-                  setDuration(36);
-                  setMonthlyProfit(100000);
-                }}
-              >
-                Redefinir Valores
-              </Button>
+              <Alert className="bg-background/10 border-white/20">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Exemplo Real</AlertTitle>
+                <AlertDescription className="text-xs">
+                  Para {equipmentQty} equipamentos em {duration} meses, a locação proporciona uma economia tributária de R$ {(rentalTaxBenefit * equipmentQty).toLocaleString('pt-BR')} contra R$ {(purchaseTaxBenefit * equipmentQty).toLocaleString('pt-BR')} da compra.
+                </AlertDescription>
+              </Alert>
             </CardContent>
           </Card>
         </div>
-
-        <Alert className="mt-8 bg-green-50 border-green-200">
-          <AlertCircle className="h-4 w-4 text-green-600" />
-          <AlertTitle>Exemplo Prático</AlertTitle>
-          <AlertDescription>
-            Para uma empresa com lucro de R$100k/mês, a locação de 10 notebooks economiza até <strong>R$ {(taxSavings(1500)*10).toLocaleString('pt-BR')}/ano</strong> em impostos.
-          </AlertDescription>
-        </Alert>
       </div>
     </section>
   );
