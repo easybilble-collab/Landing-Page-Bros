@@ -7,31 +7,26 @@ const benefits = [
     icon: <DollarSign className="h-8 w-8 text-primary" />,
     title: "Capital Livre",
     description: "Invista no seu core business, não em ativos que desvalorizam.",
-    className: "md:col-span-2",
   },
   {
     icon: <TrendingUp className="h-8 w-8 text-primary" />,
     title: "Sempre Atualizado",
     description: "Acesso à última tecnologia sem custos de obsolescência.",
-    className: "",
   },
   {
     icon: <ShieldCheck className="h-8 w-8 text-primary" />,
     title: "Suporte Total",
     description: "Manutenção e troca rápida garantem sua produtividade.",
-    className: "",
   },
   {
     icon: <PiggyBank className="h-8 w-8 text-primary" />,
     title: "Benefício Fiscal",
     description: "Deduza 100% do valor como despesa operacional.",
-    className: "md:col-span-2",
   },
   {
     icon: <RefreshCw className="h-8 w-8 text-primary" />,
     title: "Flexibilidade Total",
     description: "Escale, reduza ou atualize seus equipamentos com facilidade.",
-    className: "",
   },
 ];
 
@@ -49,7 +44,7 @@ export const WhyBros = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {benefits.map((benefit, index) => (
-            <Card key={index} className={`p-6 border-2 hover:border-primary transition-all hover:shadow-lg ${benefit.className}`}>
+            <Card key={index} className="p-6 border-2 hover:border-primary transition-all hover:shadow-lg">
               <CardHeader className="p-0">
                 {benefit.icon}
                 <CardTitle className="mt-4 text-xl">{benefit.title}</CardTitle>
@@ -59,7 +54,7 @@ export const WhyBros = () => {
               </CardContent>
             </Card>
           ))}
-           <Card className="md:col-span-1 p-6 bg-primary text-primary-foreground flex flex-col justify-center items-center text-center">
+           <Card className="p-6 bg-primary text-primary-foreground flex flex-col justify-center items-center text-center">
               <CardHeader className="p-0">
                 <CardTitle className="text-2xl">Pronto para Inovar?</CardTitle>
               </CardHeader>

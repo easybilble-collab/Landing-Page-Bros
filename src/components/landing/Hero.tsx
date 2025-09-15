@@ -30,7 +30,7 @@ export const Hero = () => {
           <img 
             src="https://images.pexels.com/photos/7988079/pexels-photo-7988079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
             alt="Pilha de notebooks modernos prontos para locação" 
-            className="rounded-2xl shadow-2xl w-full max-w-md object-cover"
+            className="rounded-2xl shadow-2xl w-full object-cover"
           />
         </div>
       </div>

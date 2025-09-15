@@ -50,7 +50,7 @@ export const CostComparison = () => {
 
   return (
     <TooltipProvider>
-      <section className="py-12 bg-secondary">
+      <section className="py-20 bg-secondary">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold">Calculadora de Custo-Benefício: Comprar vs. Alugar</h2>
