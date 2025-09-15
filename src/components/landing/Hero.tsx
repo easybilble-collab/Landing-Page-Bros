@@ -27,11 +27,10 @@ export const Hero = () => {
           </div>
         </div>
         <div className="flex justify-center items-center">
-          {/* Placeholder for an innovative 3D graphic or high-quality product mockup */}
           <img 
-            src="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-            alt="Modern office setup with advanced technology" 
-            className="rounded-2xl shadow-2xl w-full max-w-md"
+            src="https://images.pexels.com/photos/7988079/pexels-photo-7988079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+            alt="Pilha de notebooks modernos prontos para locação" 
+            className="rounded-2xl shadow-2xl w-full max-w-md object-cover"
           />
         </div>
       </div>
