@@ -3,21 +3,21 @@ import { Badge } from "@/components/ui/badge";
 
 const options = [
   {
-    imgSrc: "https://images.pexels.com/photos/1029757/pexels-photo-1029757.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    imgSrc: "https://images.pexels.com/photos/7974/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     title: "Upgrade Premium",
     description: "Troque por equipamentos mais modernos",
     badge: "MAIS POPULAR",
     badgeVariant: "default",
   },
   {
-    imgSrc: "https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    imgSrc: "https://images.pexels.com/photos/4050303/pexels-photo-4050303.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     title: "Extensão do Contrato",
     description: "Continue com os mesmos equipamentos",
     badge: "ECONOMIA",
     badgeVariant: "secondary",
   },
   {
-    imgSrc: "https://images.pexels.com/photos/7988086/pexels-photo-7988086.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    imgSrc: "https://images.pexels.com/photos/434337/pexels-photo-434337.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     title: "Devolução Simples",
     description: "Finalize sem complicações",
     badge: "SEM TAXA",

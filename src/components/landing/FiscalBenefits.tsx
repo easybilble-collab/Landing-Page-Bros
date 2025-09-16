@@ -91,7 +91,7 @@ export const FiscalBenefits = () => {
             </div>
           </div>
           <div className="hidden lg:block">
-            <img src="https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Análise de gráficos financeiros" className="rounded-lg object-cover w-full h-full shadow-lg" />
+            <img src="https://images.pexels.com/photos/6801874/pexels-photo-6801874.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Análise de gráficos financeiros em monitores modernos" className="rounded-lg object-cover w-full h-full shadow-lg" />
           </div>
         </div>
       </div>

@@ -54,7 +54,7 @@ export const WhyBros = () => {
               </CardContent>
             </Card>
           ))}
-           <div className="relative rounded-lg overflow-hidden bg-cover bg-center p-6 flex flex-col justify-center items-center text-center" style={{ backgroundImage: "url('https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')" }}>
+           <div className="relative rounded-lg overflow-hidden bg-cover bg-center p-6 flex flex-col justify-center items-center text-center" style={{ backgroundImage: "url('https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')" }}>
               <div className="absolute inset-0 bg-black/50"></div>
               <div className="relative z-10 text-white">
                 <h3 className="text-2xl font-bold">Pronto para Inovar?</h3>
