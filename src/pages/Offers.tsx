@@ -1,6 +1,10 @@
+import { useState, useMemo } from "react";
 import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
 import { ProductCard } from "@/components/ProductCard";
+import { OffersFilterBar } from "@/components/offers/OffersFilterBar";
+import { Badge } from "@/components/ui/badge";
+import { SearchX } from "lucide-react";
 
 const offers = [
   {
@@ -48,24 +52,57 @@ const offers = [
 ];
 
 const Offers = () => {
+  const [selectedBrand, setSelectedBrand] = useState("Todos");
+  const [sortOrder, setSortOrder] = useState("price-asc");
+
+  const filteredAndSortedOffers = useMemo(() => {
+    const filtered = selectedBrand === "Todos"
+      ? offers
+      : offers.filter(offer => offer.tags.includes(selectedBrand));
+
+    return [...filtered].sort((a, b) => {
+      if (sortOrder === "price-desc") {
+        return b.price - a.price;
+      }
+      return a.price - b.price;
+    });
+  }, [selectedBrand, sortOrder]);
+
   return (
     <div className="bg-background text-foreground">
       <Header />
       <main className="pt-32 pb-20">
         <section className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
+            <Badge className="mb-4 bg-primary text-primary-foreground">Catálogo Otimizado</Badge>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">
-              Ofertas Especiais
+              Soluções de Alta Performance
             </h1>
             <p className="text-lg text-muted-foreground mt-4 max-w-3xl mx-auto">
-              Selecione o equipamento ideal para sua equipe e solicite um orçamento personalizado. Tecnologia de ponta com a flexibilidade que sua empresa precisa.
+              Analise nosso portfólio de equipamentos. Utilize os filtros para encontrar a solução exata que sua operação demanda e solicite um orçamento otimizado.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {offers.map((offer) => (
-              <ProductCard key={offer.name} {...offer} />
-            ))}
-          </div>
+
+          <OffersFilterBar
+            selectedBrand={selectedBrand}
+            onBrandChange={setSelectedBrand}
+            sortOrder={sortOrder}
+            onSortOrderChange={setSortOrder}
+          />
+
+          {filteredAndSortedOffers.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredAndSortedOffers.map((offer) => (
+                <ProductCard key={offer.name} {...offer} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16 bg-secondary rounded-lg border">
+              <SearchX className="mx-auto h-12 w-12 text-muted-foreground" />
+              <h3 className="mt-4 text-xl font-semibold">Nenhum equipamento encontrado</h3>
+              <p className="mt-2 text-muted-foreground">Tente ajustar seus filtros para encontrar o que procura.</p>
+            </div>
+          )}
         </section>
       </main>
       <Footer />
