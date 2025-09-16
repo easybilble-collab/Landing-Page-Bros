@@ -2,8 +2,30 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Phone } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Link } from "react-router-dom";
 
-const navLinks = ["Soluções", "Empresas", "Benefícios", "Ofertas"];
+const navLinks = [
+  { name: "Soluções", path: "/#solucoes" },
+  { name: "Empresas", path: "/#empresas" },
+  { name: "Benefícios", path: "/#beneficios" },
+  { name: "Ofertas", path: "/ofertas" },
+];
+
+const NavLink = ({ path, children }: { path: string; children: React.ReactNode }) => {
+  const className = "text-sm font-medium text-muted-foreground transition-colors hover:text-primary";
+  if (path.startsWith('/')) {
+    return <Link to={path} className={className}>{children}</Link>;
+  }
+  return <a href={path} className={className}>{children}</a>;
+};
+
+const MobileNavLink = ({ path, children }: { path: string; children: React.ReactNode }) => {
+  const className = "text-lg font-medium text-foreground hover:text-primary";
+  if (path.startsWith('/')) {
+    return <Link to={path} className={className}>{children}</Link>;
+  }
+  return <a href={path} className={className}>{children}</a>;
+};
 
 export const Header = () => {
   const isMobile = useIsMobile();
@@ -11,11 +33,11 @@ export const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b">
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
-        <a href="#" className="text-2xl font-bold">
+        <Link to="/" className="text-2xl font-bold">
           <span className="bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">
             Bro's Rental
           </span>
-        </a>
+        </Link>
         {isMobile ? (
           <Sheet>
             <SheetTrigger asChild>
@@ -26,13 +48,9 @@ export const Header = () => {
             <SheetContent side="right">
               <nav className="flex flex-col gap-6 pt-10">
                 {navLinks.map((link) => (
-                  <a
-                    key={link}
-                    href="#"
-                    className="text-lg font-medium text-foreground hover:text-primary"
-                  >
-                    {link}
-                  </a>
+                  <MobileNavLink key={link.name} path={link.path}>
+                    {link.name}
+                  </MobileNavLink>
                 ))}
                 <Button className="mt-4"><Phone className="mr-2 h-4 w-4" /> Fale com um Consultor</Button>
               </nav>
@@ -42,13 +60,9 @@ export const Header = () => {
           <div className="flex items-center gap-8">
             <nav className="hidden items-center gap-6 md:flex">
               {navLinks.map((link) => (
-                <a
-                  key={link}
-                  href="#"
-                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-                >
-                  {link}
-                </a>
+                <NavLink key={link.name} path={link.path}>
+                  {link.name}
+                </NavLink>
               ))}
             </nav>
             <Button>
