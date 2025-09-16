@@ -47,46 +47,51 @@ export const FiscalBenefits = () => {
           ))}
         </div>
         
-        <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          <Card className="lg:col-span-2 border-2 border-primary shadow-lg">
-            <CardHeader>
-              <Badge className="w-fit bg-primary text-primary-foreground">
-                <Gem className="mr-2 h-4 w-4" /> Vantagem Estratégica para Lucro Real
-              </Badge>
-              <CardTitle className="pt-2">Maximize sua Economia Tributária</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4">
-                Para empresas no regime de Lucro Real, a locação de equipamentos é <strong>100% dedutível como despesa operacional (OPEX)</strong>. Isso reduz diretamente a base de cálculo do Imposto de Renda (IRPJ) e da Contribuição Social sobre o Lucro Líquido (CSLL), gerando uma economia significativa e imediata.
-              </p>
-              <Button className="bg-cta hover:bg-cta/90 text-cta-foreground">
-                Simular Economia para Lucro Real
-              </Button>
-            </CardContent>
-          </Card>
+        <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+          <div className="flex flex-col gap-8">
+            <Card className="border-2 border-primary shadow-lg flex-grow">
+              <CardHeader>
+                <Badge className="w-fit bg-primary text-primary-foreground">
+                  <Gem className="mr-2 h-4 w-4" /> Vantagem Estratégica para Lucro Real
+                </Badge>
+                <CardTitle className="pt-2">Maximize sua Economia Tributária</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">
+                  Para empresas no regime de Lucro Real, a locação de equipamentos é <strong>100% dedutível como despesa operacional (OPEX)</strong>. Isso reduz diretamente a base de cálculo do Imposto de Renda (IRPJ) e da Contribuição Social sobre o Lucro Líquido (CSLL), gerando uma economia significativa e imediata.
+                </p>
+                <Button className="bg-cta hover:bg-cta/90 text-cta-foreground">
+                  Simular Economia para Lucro Real
+                </Button>
+              </CardContent>
+            </Card>
 
-          <div className="bg-background p-6 rounded-lg">
-            <h3 className="font-semibold text-lg mb-2">Para Lucro Presumido e Simples Nacional</h3>
-            <ul className="space-y-2">
-              <li className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-success mr-2 mt-1 flex-shrink-0" />
-                <span className="text-muted-foreground">
-                  <strong>Previsibilidade Total:</strong> Custos mensais fixos sem surpresas com manutenção.
-                </span>
-              </li>
-              <li className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-success mr-2 mt-1 flex-shrink-0" />
-                <span className="text-muted-foreground">
-                  <strong>Tecnologia de Ponta:</strong> Acesso a equipamentos modernos sem descapitalizar sua empresa.
-                </span>
-              </li>
-              <li className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-success mr-2 mt-1 flex-shrink-0" />
-                <span className="text-muted-foreground">
-                  <strong>Foco no Core Business:</strong> Deixe a gestão de ativos de TI conosco e concentre-se no que sua empresa faz de melhor.
-                </span>
-              </li>
-            </ul>
+            <div className="bg-background p-6 rounded-lg">
+              <h3 className="font-semibold text-lg mb-2">Para Lucro Presumido e Simples Nacional</h3>
+              <ul className="space-y-2">
+                <li className="flex items-start">
+                  <CheckCircle className="h-5 w-5 text-success mr-2 mt-1 flex-shrink-0" />
+                  <span className="text-muted-foreground">
+                    <strong>Previsibilidade Total:</strong> Custos mensais fixos sem surpresas com manutenção.
+                  </span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="h-5 w-5 text-success mr-2 mt-1 flex-shrink-0" />
+                  <span className="text-muted-foreground">
+                    <strong>Tecnologia de Ponta:</strong> Acesso a equipamentos modernos sem descapitalizar sua empresa.
+                  </span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="h-5 w-5 text-success mr-2 mt-1 flex-shrink-0" />
+                  <span className="text-muted-foreground">
+                    <strong>Foco no Core Business:</strong> Deixe a gestão de ativos de TI conosco e concentre-se no que sua empresa faz de melhor.
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="hidden lg:block">
+            <img src="https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Análise de gráficos financeiros" className="rounded-lg object-cover w-full h-full shadow-lg" />
           </div>
         </div>
       </div>

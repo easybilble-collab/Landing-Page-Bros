@@ -54,17 +54,16 @@ export const WhyBros = () => {
               </CardContent>
             </Card>
           ))}
-           <Card className="p-6 bg-primary text-primary-foreground flex flex-col justify-center items-center text-center">
-              <CardHeader className="p-0">
-                <CardTitle className="text-2xl">Pronto para Inovar?</CardTitle>
-              </CardHeader>
-              <CardContent className="p-0 mt-4">
-                <p>Descubra o plano ideal para sua empresa.</p>
+           <div className="relative rounded-lg overflow-hidden bg-cover bg-center p-6 flex flex-col justify-center items-center text-center" style={{ backgroundImage: "url('https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')" }}>
+              <div className="absolute inset-0 bg-black/50"></div>
+              <div className="relative z-10 text-white">
+                <h3 className="text-2xl font-bold">Pronto para Inovar?</h3>
+                <p className="mt-2">Descubra o plano ideal para sua empresa.</p>
                 <Button variant="secondary" className="mt-4 bg-white text-primary hover:bg-gray-200">
                   Fale Conosco <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
         </div>
       </div>
     </section>

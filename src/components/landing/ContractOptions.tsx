@@ -1,24 +1,23 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUpCircle, Clock, RotateCcw } from "lucide-react";
 
 const options = [
   {
-    icon: <ArrowUpCircle className="h-10 w-10 text-primary" />,
+    imgSrc: "https://images.pexels.com/photos/1029757/pexels-photo-1029757.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     title: "Upgrade Premium",
     description: "Troque por equipamentos mais modernos",
     badge: "MAIS POPULAR",
     badgeVariant: "default",
   },
   {
-    icon: <Clock className="h-10 w-10 text-blue-500" />,
+    imgSrc: "https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     title: "Extensão do Contrato",
     description: "Continue com os mesmos equipamentos",
     badge: "ECONOMIA",
     badgeVariant: "secondary",
   },
   {
-    icon: <RotateCcw className="h-10 w-10 text-green-500" />,
+    imgSrc: "https://images.pexels.com/photos/7988086/pexels-photo-7988086.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     title: "Devolução Simples",
     description: "Finalize sem complicações",
     badge: "SEM TAXA",
@@ -38,15 +37,15 @@ export const ContractOptions = () => {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
           {options.map((option, index) => (
-            <Card key={index} className="relative overflow-hidden border-2 hover:border-primary transition-all">
-              <Badge variant={option.badgeVariant as any} className="absolute top-4 right-4">{option.badge}</Badge>
-              <CardHeader className="items-center">
-                {option.icon}
-                <CardTitle className="mt-4">{option.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">{option.description}</p>
-              </CardContent>
+            <Card key={index} className="relative overflow-hidden border-2 hover:border-primary transition-all group">
+              <Badge variant={option.badgeVariant as any} className="absolute top-4 right-4 z-10">{option.badge}</Badge>
+              <img src={option.imgSrc} alt={option.title} className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" />
+              <div className="p-6">
+                <CardTitle className="mt-2">{option.title}</CardTitle>
+                <CardContent className="p-0 mt-2">
+                  <p className="text-muted-foreground">{option.description}</p>
+                </CardContent>
+              </div>
             </Card>
           ))}
         </div>
