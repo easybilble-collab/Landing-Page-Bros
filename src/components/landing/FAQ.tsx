@@ -7,8 +7,20 @@ import {
 
 const faqs = [
   {
+    question: "Quais empresas podem alugar?",
+    answer: "Atendemos exclusivamente pessoas jurídicas (empresas com CNPJ) com, no mínimo, 2 anos de atividade. A contratação está sujeita a uma análise de crédito simples e rápida.",
+  },
+  {
     question: "Qual o prazo mínimo de locação?",
     answer: "Nosso prazo mínimo padrão é de 12 meses, mas oferecemos flexibilidade para extensões e contratos personalizados de acordo com a necessidade do seu projeto.",
+  },
+  {
+    question: "Como solicitar um orçamento?",
+    answer: "Você pode solicitar um orçamento personalizado diretamente através do nosso site, por telefone ou e-mail. Nossa equipe responderá em poucas horas.",
+  },
+  {
+    question: "Como funciona a entrega?",
+    answer: "Cuidamos de toda a logística. A entrega e a instalação são realizadas por nossa equipe especializada em até 48 horas úteis após a confirmação do pedido.",
   },
   {
     question: "Vocês fazem manutenção dos equipamentos?",
@@ -19,8 +31,8 @@ const faqs = [
     answer: "Sim, uma das nossas maiores vantagens é a flexibilidade. Você pode solicitar um upgrade ou a troca de equipamentos a qualquer momento durante o contrato.",
   },
   {
-    question: "Como funciona a entrega?",
-    answer: "Cuidamos de toda a logística. A entrega e a instalação são realizadas por nossa equipe especializada em até 48 horas úteis após a confirmação do pedido.",
+    question: "Vocês oferecem suporte técnico?",
+    answer: "Oferecemos suporte técnico especializado 24/7 para resolver qualquer eventualidade e garantir a continuidade das suas operações.",
   },
   {
     question: "Há cobertura nacional?",
@@ -29,14 +41,6 @@ const faqs = [
   {
     question: "Posso cancelar o contrato antes do prazo?",
     answer: "Sim, é possível. Existem condições específicas para o cancelamento antecipado que podem ser consultadas em seu contrato ou com nosso time de consultores.",
-  },
-  {
-    question: "Vocês oferecem suporte técnico?",
-    answer: "Oferecemos suporte técnico especializado 24/7 para resolver qualquer eventualidade e garantir a continuidade das suas operações.",
-  },
-  {
-    question: "Como solicitar um orçamento?",
-    answer: "Você pode solicitar um orçamento personalizado diretamente através do nosso site, por telefone ou e-mail. Nossa equipe responderá em poucas horas.",
   },
 ];
 
