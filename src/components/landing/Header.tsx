@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Phone } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const navLinks = [
   { name: "Soluções", path: "/#solucoes" },
@@ -11,18 +11,45 @@ const navLinks = [
   { name: "Ofertas", path: "/ofertas" },
 ];
 
+const handleNavClick = (path: string, location: ReturnType<typeof useLocation>) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const hashIndex = path.indexOf('#');
+  if (hashIndex === -1) return;
+
+  const targetHash = path.substring(hashIndex);
+  const targetPath = path.substring(0, hashIndex) || '/';
+
+  if (location.pathname === targetPath) {
+    e.preventDefault();
+    const element = document.getElementById(targetHash.substring(1));
+    if (element) {
+      const headerOffset = 80; // Corresponde a h-20 (5rem) no Tailwind
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  }
+};
+
 const NavLink = ({ path, children }: { path: string; children: React.ReactNode }) => {
+  const location = useLocation();
   const className = "text-sm font-medium text-muted-foreground transition-colors hover:text-primary";
+  
   if (path.startsWith('/')) {
-    return <Link to={path} className={className}>{children}</Link>;
+    return <Link to={path} className={className} onClick={handleNavClick(path, location)}>{children}</Link>;
   }
   return <a href={path} className={className}>{children}</a>;
 };
 
 const MobileNavLink = ({ path, children }: { path: string; children: React.ReactNode }) => {
+  const location = useLocation();
   const className = "text-lg font-medium text-foreground hover:text-primary";
+
   if (path.startsWith('/')) {
-    return <Link to={path} className={className}>{children}</Link>;
+    return <Link to={path} className={className} onClick={handleNavClick(path, location)}>{children}</Link>;
   }
   return <a href={path} className={className}>{children}</a>;
 };
