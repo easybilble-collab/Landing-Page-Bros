@@ -28,8 +28,8 @@ export const Hero = () => {
         </div>
         <div className="flex justify-center items-center">
           <img 
-            src="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-            alt="Profissional utilizando um notebook moderno em um ambiente de trabalho inovador" 
+            src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+            alt="Equipe diversificada colaborando em um escritório moderno e tecnológico" 
             className="rounded-2xl shadow-2xl w-full object-cover"
           />
         </div>
